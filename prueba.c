@@ -100,10 +100,8 @@ float datos_entrenamiento[60][4] ={ //matriz de datos para entrenar el modelo de
     {14.9,23.7,1003.1,1},
 };
 for(int x = 0; x<10000; x++){ //bucle de aprendizaje 
-    for (int i = 0; i<60;i = i+4){ // bucle para recorrer la matriz de datos
-        for(int j = 0; j<4; j++){
-            
-        }
+    for (int i = 0; i<60;i = i++){ // bucle para recorrer la matriz de datos
+        
     }
 }
 return 0;
