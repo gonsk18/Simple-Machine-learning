@@ -5,10 +5,11 @@
 
 float ReLU (float z);
 float Der_ReLU(float z);
+float sig(float z);
 int main(void){
 
 /*Modelo de perceptron con 6 neuronas ocultas para 
-prediccion de lluvia segun la entrada de parametros de humedad relativa 
+prediccion de lluvia segun la entrada de parametros de velocidad del viento 
 temperatura y presion atm */
 
 //Modelo de engtrenamiento solo se usara para obtener el valor de los pesos necesarios
@@ -19,9 +20,9 @@ float w1,w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15, w16, w17,
 float v1, v2, v3, v4, v5, v6; //valores de pesos de salida 
 // Formula de salida Z = (w1*x1 + w2*x2 + w3*x3 + b1)*v1 + (w4*x1 + w5*x2 + w6*x3 + b2)*v2 + (w7*x1 + w8*x2 + w9*x3 + b3)*v3 + (w10*x1 + w11*x2 + w12*x3 + b4)*v4 + (w13*x1 + w14*x2 + w15*x3 + b5)*v5 + (w16*x1 + w17*x2 + w18*x3 + b6) + b
 
-float b1, b2, b3, b4, b5, b6;
+float b1, b2, b3, b4, b5, b6; //Declaracion de las bias o sesgos internos
 //variables de salida:
-float a1, a2, a3, a4, a5, a6, z;
+float a1, a2, a3, a4, a5, a6, z; //Declaracion de las salidas tanto internas como externa
 //asignacion de los valores iniciales 
 w1 = 0.5f; w2 = 0.4f; w3 = 0.25f; 
 w4 = 0.7f; w5 = 0.53f; w6 = 0.8f;
@@ -87,7 +88,7 @@ float datos_entrenamiento[60][4] ={ //matriz de datos para entrenar el modelo de
     {11.4,7.0,1013.4,1},
     {7.2,10.2,1012.7,1},
     {10.2,8.1,1012.7,1},
-    {13.1,9.4,1002.1,1}, //50
+    {13.1,9.4,1002.1,1},
     {10.0,8.3,1007.7,0},
     {14.7,23.0,1006.4,1},
     {13.9,20.6,1004.1,1},
@@ -99,11 +100,67 @@ float datos_entrenamiento[60][4] ={ //matriz de datos para entrenar el modelo de
     {13.4,10.9,1017.4,0},
     {14.9,23.7,1003.1,1},
 };
-for(int x = 0; x<10000; x++){ //bucle de aprendizaje 
-    for (int i = 0; i<60;i = i++){ // bucle para recorrer la matriz de datos
+float respuesta; // La respuesta esperada de los datos de aprendizaje
+for(int x = 0; x<4000; x++){ //bucle de aprendizaje 
+    for (int i = 0; i<60;i++){ // bucle para recorrer la matriz de datos
+// Declaración de la 
+        x1 = (datos_entrenamiento[i][0] - 6.1)/(26.5);
+        x2 = (datos_entrenamiento[i][1] - 5.1)/(19.9);
+        x3 = (datos_entrenamiento[i][2] - 999.3)/(32.8);
+        respuesta = datos_entrenamiento[i][3];
+        a1 = (w1*x1 + w2*x2 + w3*x3 + b1);
+        a2 = (w4*x1 + w5*x2 + w6*x3 + b2);
+        a3 = (w7*x1 + w8*x2 + w9*x3 + b3);
+        a4 = (w10*x1 + w11*x2 + w12*x3 + b4);
+        a5 = (w13*x1 + w14*x2 + w15*x3 + b5);
+        a6 = (w16*x1 + w17*x2 + w18*x3 + b6);
+        z =  sig(ReLU(a1)*v1 + ReLU(a2)*v2 + ReLU(a3)*v3 + ReLU(a4)*v4 + ReLU(a5)*v5 + ReLU(a6)*v6 + b);
+// Ajuste de los pesos externos
+        v1 = v1 - ((z-respuesta) * ReLU(a1) * lc * z * (1-z));
+        v2 = v2 - ((z-respuesta) * ReLU(a2) * lc * z * (1-z));
+        v3 = v3 - ((z-respuesta) * ReLU(a3) * lc * z * (1-z));
+        v4 = v4 - ((z-respuesta) * ReLU(a4) * lc * z * (1-z));
+        v5 = v5 - ((z-respuesta) * ReLU(a5) * lc * z * (1-z));
+        v6 = v6 - ((z-respuesta) * ReLU(a6) * lc * z * (1-z));
+// Ajuste de la bias externa
+        b = b - ((z - respuesta) * lc * z * (1-z));
+// Ajuste de pesos internos
+        w1 = w1 - ((z - respuesta) * Der_ReLU(a1) * v1 * x1 * lc * z * (1-z));
+        w2 = w2 - ((z - respuesta) * Der_ReLU(a1) * v1 * x2 * lc * z * (1-z));
+        w3 = w3 - ((z - respuesta) * Der_ReLU(a1) * v1 * x3 * lc * z * (1-z));
+
+        w4 = w4 - ((z - respuesta) * Der_ReLU(a2) * v2 * x1 * lc * z * (1-z));
+        w5 = w5 - ((z - respuesta) * Der_ReLU(a2) * v2 * x2 * lc * z * (1-z));
+        w6 = w6 - ((z - respuesta) * Der_ReLU(a2) * v2 * x3 * lc * z * (1-z));
+
+        w7 = w7 - ((z - respuesta) * Der_ReLU(a3) * v3 * x1 * lc * z * (1-z));
+        w8 = w8 - ((z - respuesta) * Der_ReLU(a3) * v3 * x2 * lc * z * (1-z));
+        w9 = w9 - ((z - respuesta) * Der_ReLU(a3) * v3 * x3 * lc * z * (1-z));
+
+        w10 = w10 - ((z - respuesta) * Der_ReLU(a4) * v4 * x1 * lc * z * (1-z));
+        w11 = w11 - ((z - respuesta) * Der_ReLU(a4) * v4 * x2 * lc * z * (1-z));
+        w12 = w12 - ((z - respuesta) * Der_ReLU(a4) * v4 * x3 * lc * z * (1-z));
+
+        w13 = w13 - ((z - respuesta) * Der_ReLU(a5) * v5 * x1 * lc * z * (1-z));
+        w14 = w14 - ((z - respuesta) * Der_ReLU(a5) * v5 * x2 * lc * z * (1-z));
+        w15 = w15 - ((z - respuesta) * Der_ReLU(a5) * v5 * x3 * lc * z * (1-z));
         
+        w16 = w16 - ((z - respuesta) * Der_ReLU(a6) * v6 * x1 * lc * z * (1-z));
+        w17 = w17 - ((z - respuesta) * Der_ReLU(a6) * v6 * x2 * lc * z * (1-z));
+        w18 = w18 - ((z - respuesta) * Der_ReLU(a6) * v6 * x3 * lc * z * (1-z));
+// Ajuste de las bias internas
+        b1 = b1 - ((z - respuesta) * Der_ReLU(a1) * v1 * lc * z * (1-z));
+        b2 = b2 - ((z - respuesta) * Der_ReLU(a2) * v2 * lc * z * (1-z));
+        b3 = b3 - ((z - respuesta) * Der_ReLU(a3) * v3 * lc * z * (1-z));
+        b4 = b4 - ((z - respuesta) * Der_ReLU(a4) * v4 * lc * z * (1-z));
+        b5 = b5 - ((z - respuesta) * Der_ReLU(a5) * v5 * lc * z * (1-z));
+        b6 = b6 - ((z - respuesta) * Der_ReLU(a6) * v6 * lc * z * (1-z));
     }
 }
+printf (" La probabilidad de que llueva es de : %f \n", z);
+printf("w1 = %f \n w2 = %f \n w3 = %f \n w4 = %f \n w5 = %f \n w6 = %f \n w7 = %f \n w8 = %f \n w9 = %f \n w10 = %f \n w11 = %f \n w12 = %f \n w13 = %f \n w14 = %f \n w15 = %f \n w16 = %f \n w17 = %f \n w18 = %f \n" , w1,w2,w3,w4,w5,w6,w7,w8,w9,w10,w11,w12,w13,w14,w15,w16,w17,w18);
+printf("b1 = %f \n b2 = %f \n b3 = %f \n b4 = %f \n b5 = %f \n b6 = %f \n ", b1,b2,b3,b4,b5,b6);
+printf("v1 = %f \n v2 = %f \n v3 = %f \n v4 = %f \n v5 = %f \n v6 = %f \n b = %f \n ", v1,v2,v3,v4,v5,v6,b);
 return 0;
 }
 
@@ -128,4 +185,8 @@ float Der_ReLU (float z) {
     else{
         return 0.0f;
     }
+}
+
+float sig(float z) {
+    return 1.0f / (1.0f + expf(-z));
 }
