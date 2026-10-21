@@ -14,6 +14,10 @@ temperatura y presion atm */
 
 //Modelo de engtrenamiento solo se usara para obtener el valor de los pesos necesarios
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 28c087b (Ajuste de las iteraciones y coeficiente de aprendizaje para obtener la precision deseada)
 //definimos nuestras variables principales 
 float w1,w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15, w16, w17, w18, x1, x2, x3, b, lc;// valores de pesos intermedios
 float v1, v2, v3, v4, v5, v6; //valores de pesos de salida 
@@ -34,7 +38,7 @@ v1 = 0.53f; v2 = 0.36f; v3 = 0.19f; v4 = 0.67f; v5 = 0.87f; v6 = 0.33f; //asigna
 
 b1 = 0.17f; b2 = 0.82f; b3 = 0.45f; b4 = 0.91f; b5 = 0.33f; b6 = 0.68f; b = 0.12f; //asignacion de las bias
 
-lc = 0.001; //coeficiente de aprendizaje
+lc = 0.0001; //coeficiente de aprendizaje
 
 float datos_entrenamiento[60][4] ={ //matriz de datos para entrenar el modelo de machine learning
     //temp-med|velv|presion|lluvia
@@ -100,7 +104,7 @@ float datos_entrenamiento[60][4] ={ //matriz de datos para entrenar el modelo de
     {14.9,23.7,1003.1,1},
 };
 float respuesta; // La respuesta esperada de los datos de aprendizaje
-for(int x = 0; x<4000; x++){ //bucle de aprendizaje 
+for(int x = 0; x<100000; x++){ //bucle de aprendizaje 
     for (int i = 0; i<60;i++){ // bucle para recorrer la matriz de datos
 // Declaración de la 
         x1 = (datos_entrenamiento[i][0] - 6.1)/(26.5);
@@ -160,7 +164,6 @@ printf (" La probabilidad de que llueva es de : %f \n", z);
 printf("w1 = %f \n w2 = %f \n w3 = %f \n w4 = %f \n w5 = %f \n w6 = %f \n w7 = %f \n w8 = %f \n w9 = %f \n w10 = %f \n w11 = %f \n w12 = %f \n w13 = %f \n w14 = %f \n w15 = %f \n w16 = %f \n w17 = %f \n w18 = %f \n" , w1,w2,w3,w4,w5,w6,w7,w8,w9,w10,w11,w12,w13,w14,w15,w16,w17,w18);
 printf("b1 = %f \n b2 = %f \n b3 = %f \n b4 = %f \n b5 = %f \n b6 = %f \n ", b1,b2,b3,b4,b5,b6);
 printf("v1 = %f \n v2 = %f \n v3 = %f \n v4 = %f \n v5 = %f \n v6 = %f \n b = %f \n ", v1,v2,v3,v4,v5,v6,b);
->>>>>>> salvado
 return 0;
 }
 
