@@ -14,10 +14,6 @@ temperatura y presion atm */
 
 //Modelo de engtrenamiento solo se usara para obtener el valor de los pesos necesarios
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 28c087b (Ajuste de las iteraciones y coeficiente de aprendizaje para obtener la precision deseada)
 //definimos nuestras variables principales 
 float w1,w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15, w16, w17, w18, x1, x2, x3, b, lc;// valores de pesos intermedios
 float v1, v2, v3, v4, v5, v6; //valores de pesos de salida 
